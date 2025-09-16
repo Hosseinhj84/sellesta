@@ -1,0 +1,148 @@
+html,
+        body {
+            height: 100%;
+            /* 🔥 اسکرول مرورگر رو غیر فعال می‌کنیم */
+        }
+
+        .user-logged {
+            display: none;
+        }
+
+        .navbar-brand img {
+            max-height: 70px;
+            width: auto;
+        }
+
+        /* کنترل ارتفاع اسلایدر */
+        .carousel-inner img {
+            height: 450px;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-inner img {
+                height: 250px;
+            }
+        }
+
+        .product-slider {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            touch-action: pan-y;
+        }
+
+        .product-item {
+            flex: 0 0 auto;
+            box-sizing: border-box;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: auto;
+            display: block;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .slider-btn.prev {
+            left: 10px;
+        }
+
+        .slider-btn.next {
+            right: 10px;
+        }
+
+        /* ریسپانسیو اسلایدر */
+        @media (max-width: 576px) {
+            .product-item {
+                min-width: 50%;
+            }
+        }
+
+        @media (min-width: 577px) and (max-width: 992px) {
+            .product-item {
+                min-width: 25%;
+            }
+        }
+
+        @media (min-width: 993px) {
+            .product-item {
+                min-width: 16.666%;
+            }
+        }
+
+        /* انیمیشن اسکرول */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px) scale(0.95) rotateX(10deg);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform, opacity;
+        }
+
+        .animate-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0);
+        }
+
+        .animate-on-scroll.out-view {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.9) rotateX(-10deg);
+        }
+
+        /* header scroll effect */
+        .navbar.sticky-top {
+            transition: background-color 320ms ease, box-shadow 320ms ease, padding 320ms ease, backdrop-filter 320ms ease;
+            background-color: transparent;
+            /* حالت اولیه */
+            padding: 18px 1rem;
+            /* فاصله بالایی/پایینی هدر در حالت عادی */
+            will-change: transform, background-color;
+        }
+
+        /* وقتی صفحه اسکرول شد */
+        .navbar.sticky-top.scrolled {
+            background-color: rgba(255, 255, 255, 0.92);
+            /* نیمه شفاف برای حس عمق */
+            box-shadow: 0 8px 30px rgba(12, 18, 28, 0.12);
+            backdrop-filter: blur(6px);
+            /* محو پس‌زمینه */
+            padding: 10px 1rem;
+            /* هدر کمی جمع‌تر میشه */
+        }
+
+        /* کوچک شدن لوگو در حالت scrolled (اختیاری و خوب برای ظاهر) */
+        .navbar.sticky-top.scrolled .navbar-brand img {
+            max-height: 48px;
+            /* اندازه جدید لوگو در حالت اسکرول */
+            transition: max-height 320ms ease;
+        }
+
+        /* حالت اولیه لوگو */
+        .navbar-brand img {
+            max-height: 70px;
+            transition: max-height 320ms ease;
+        }
+
+        /* برای کاربران که motion رو غیرفعال کرده‌اند */
+        @media (prefers-reduced-motion: reduce) {
+
+            .navbar.sticky-top,
+            .navbar-brand img {
+                transition: none;
+            }
+        }

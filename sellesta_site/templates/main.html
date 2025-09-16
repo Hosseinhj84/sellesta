@@ -1,0 +1,74 @@
+{% extends 'master.html' %}
+
+{% block title%} sellesta-homepage {% endblock %}
+
+{% block content %}
+
+<div class="d-flex flex-row">
+    <div class="product-slider animate-on-scroll">
+        <div class="product-track" id="track-products">
+            {% for category in categories %}
+            <div class="product-item image-wrapper">
+                <img src="{{ category.get_image_url }}" class="product-img lazy-img" loading="lazy"
+                    alt="{{ category.name }}">
+                <p>{{ category.name }}</p>
+            </div>
+            {% empty %}
+            <p>هیچ دسته‌بندی‌ای وجود ندارد</p>
+            {% endfor %}
+        </div>
+        <button class="btn btn-dark slider-btn prev" data-target="track-products">‹</button>
+        <button class="btn btn-dark slider-btn next" data-target="track-products">›</button>
+    </div>
+</div>
+
+<!-- Carousel -->
+<div id="carouselExampleCaptions" class="carousel slide animate-on-scroll">
+    <div class="carousel-indicators">
+        {% for slide in slides %}
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ forloop.counter0 }}"
+            class="{% if forloop.first %}active{% endif %}" aria-label="Slide {{ forloop.counter }}">
+        </button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for slide in slides %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ slide.get_image }}" class="d-block w-100" alt="{{ slide.title }}">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ slide.title }}</h5>
+                <p>{{ slide.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- اسلایدر برندها -->
+<div class="d-flex flex-row mt-4 animate-on-scroll">
+    <div class="product-slider">
+        <div class="product-track" id="track-brands">
+            {% for brand in brands %}
+            <div class="product-item"><img src="{{ brand.get_logo }}" class="product-img" alt="{{ brand.name }}">
+                {% if brand.website %}
+                <a href="{{ brand.website }}" target="_blank" class="btn btn-primary"><p>{{ brand.name }}</p></a>
+                {% else %}
+                <p>{{ brand.name }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

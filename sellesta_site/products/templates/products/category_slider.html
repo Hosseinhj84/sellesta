@@ -1,0 +1,20 @@
+{% extends 'master.html' %}
+{% block content %}
+<div class="d-flex flex-row">
+    <div class="product-slider animate-on-scroll">
+        <div class="product-track" id="track-products">
+            {% for category in categories %}
+            <div class="product-item">
+                <img src="{{ category.get_image_url }}" class="product-img" alt="{{ category.name }}">
+                <p>{{ category.name }}</p>
+            </div>
+            {% empty %}
+            <p>هنوز دسته‌بندی‌ای ثبت نشده</p>
+            {% endfor %}
+        </div>
+        <button class="btn btn-dark slider-btn prev" data-target="track-products">‹</button>
+        <button class="btn btn-dark slider-btn next" data-target="track-products">›</button>
+    </div>
+</div>
+
+{% endblock %}
