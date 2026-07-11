@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+sellesta_envi/
+db.sqlite3
+media/
+*.sqlite3
+.env
+node_modules/

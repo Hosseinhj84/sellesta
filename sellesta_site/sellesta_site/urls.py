@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include,path
+from django.urls import include ,path
 from django.shortcuts import render
 from pages.models import Pages
 from django.conf.urls.static import static
@@ -36,7 +36,8 @@ def home(request):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", home, name="home"),  # این میشه صفحه اصلی سایت
+    path("api/" , include("sellesta_site.api_urls")),
+    path("", home, name="home"),
     path("products/", include("products.urls")),
     path("members/",include("members.urls")),
     path("", include("pages.urls")),
