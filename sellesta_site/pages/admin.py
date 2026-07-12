@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Pages
+from .models import Pages , HeaderLinks
 
+admin.site.register(HeaderLinks)
 # Register your models here.
 @admin.register(Pages)
 class PageAdmin(admin.ModelAdmin):
