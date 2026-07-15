@@ -23,6 +23,16 @@ function Home() {
   }, []);
 
   const sliderRef = useRef(null);
+  const ProductSliderRef = useRef(null);
+
+  const scrollProducts = (direction) => {
+    if (!ProductSliderRef.current) return;
+
+    ProductSliderRef.current.scrollBy({
+      left: direction == "left" ? -320 : 320,
+      behavior: "smooth",
+    });
+  };
 
   const scroll = (direction) => {
     if (!sliderRef.current) return;
@@ -166,11 +176,37 @@ function Home() {
       </div>
       {/* product */}
       <div className="mt-14">
-        <h2 className="mb-6 text-2xl font-bold text-gray-900">محصولات</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {products.map((product) => {
-            <ProductsCard key={product.id} product={product} />
-          })}
+        <div className="mb-7 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">محصولات</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              محصولات جدید ما را ببینید
+            </p>
+          </div>
+          <div className="hidden gap-2 md:flex">
+            <button
+              onClick={() => scrollProducts("left")}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 transition hover:border-blue-500 hover:bg-blue-50"
+            >
+              <ChevronRight size={18} />
+            </button>
+            <button
+              onClick={() => scrollProducts("right")}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 transition hover:border-blue-500 hover:bg-blue-50"
+            >
+              <ChevronLeft size={18} />
+            </button>
+          </div>
+        </div>
+        <div
+          ref={ProductSliderRef}
+          className="flex gap-16 overflow-x-auto scroll-smoth snap-x snap-mandatory pb-4 no-scrollbar"
+        >
+          {products.map((product) => (
+            <div key={product.id} className="w-56 shrink-0 snap-start md:w-64">
+              <ProductsCard product={product} />
+            </div>
+          ))}
         </div>
       </div>
     </section>
