@@ -1,10 +1,19 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import axios from "axios";
 import api from "../api/axios";
+import ProductsCard from "../components/ProductsCard";
 
 function Home() {
   const [categories, setcategories] = useState([]);
+  const [products, setproducts] = useState([]);
+
+  useEffect(() => {
+    api
+      .get("products/")
+      .then((res) => setproducts(res.data.results))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     api
@@ -154,6 +163,15 @@ function Home() {
             </h3>
           </button>
         ))}
+      </div>
+      {/* product */}
+      <div className="mt-14">
+        <h2 className="mb-6 text-2xl font-bold text-gray-900">محصولات</h2>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {products.map((product) => {
+            <ProductsCard key={product.id} product={product} />
+          })}
+        </div>
       </div>
     </section>
   );

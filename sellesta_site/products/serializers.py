@@ -17,10 +17,14 @@ class ProductsSerializer(serializers.ModelSerializer):
     category_ids = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), many=True, write_only=True, source="categories"
     )
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Products
         fields = [
             "id", "name", "slug", "categories", "category_ids",
-            "description", "price", "available", "created",
+            "description", "price", "available", "image" , "created",
         ]
+    
+    def get_image(self , obj):
+        return obj.get_image_url()

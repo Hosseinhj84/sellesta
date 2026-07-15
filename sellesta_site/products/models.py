@@ -34,7 +34,16 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="قیمت")
     available = models.BooleanField(default=True, verbose_name="موجود است؟")
     created = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to="products/" , blank=True , null=True)
+    image_url = models.URLField(blank=True , null=True)
 
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        elif self.image_url:
+            return self.image_url
+        else :
+            return "https://picsum.photos/300/300?blur"
     class Meta:
         verbose_name = "محصول"
         verbose_name_plural = "محصولات"
