@@ -200,7 +200,7 @@ function Home() {
         </div>
         <div
           ref={ProductSliderRef}
-          className="flex gap-16 overflow-x-auto scroll-smoth snap-x snap-mandatory pb-4 no-scrollbar"
+          className="flex gap-16 overflow-x-auto scrooll-smoth snap-x snap-mandatory pb-4 no-scrollbar"
         >
           {products.map((product) => (
             <div key={product.id} className="w-56 shrink-0 snap-start md:w-64">
