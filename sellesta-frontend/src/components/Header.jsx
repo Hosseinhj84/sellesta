@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../api/axios";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [headerLinks , setheaderLinks ] = useState([]);
+  const [headerLinks, setheaderLinks] = useState([]);
 
   useEffect(() => {
     api
@@ -13,6 +15,14 @@ function Header() {
       .then((res) => setheaderLinks(res.data.results))
       .catch((err) => console.error(err));
   }, []);
+
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200/70 bg-white/80 backdrop-blur-xl shadow-sm">
       <div className="container mx-auto px-4">
@@ -106,8 +116,10 @@ function Header() {
 
           {/* دکمه ها */}
           <div className="hidden md:flex items-center gap-3">
-            <button
-              className="
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="
                 rounded-xl
                 border
                 border-gray-300
@@ -123,10 +135,32 @@ function Header() {
                 hover:text-blue-600
                 active:scale-95
               "
-            >
-              ورود / ثبت نام
-            </button>
-
+              >
+                خروج
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="
+                rounded-xl
+                border
+                border-gray-300
+                px-5
+                py-2.5
+                text-sm
+                font-medium
+                transition-all
+                duration-300
+                hover:-translate-y-0.5
+                hover:border-blue-500
+                hover:bg-blue-50
+                hover:text-blue-600
+                active:scale-95
+              "
+              >
+                ورود / ثبت نام
+              </button>
+            )}
             <button
               className="
                 relative
@@ -250,9 +284,15 @@ function Header() {
 
             <hr className="my-2" />
 
-            <button className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition">
-              ورود / ثبت نام
-            </button>
+            {user ? (
+              <button onClick={handleLogout} className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition">
+                خروج
+              </button>
+            ) : (
+              <button onClick={() => navigate("/login")} className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition">
+                ورود / ثبت نام
+              </button>
+            )}
 
             <button className="rounded-xl bg-blue-600 py-3 text-white hover:bg-blue-700 transition">
               سبد خرید

@@ -4,6 +4,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView , TokenRefreshView
 from pages.views import HeaderLinkViewSet
 from members.views import RegisterView
+from cart.views import CartDetaiilView , AddCartItemView , UpdateCartItemView , RemoveCartItemView
 
 router = DefaultRouter()
 router.register(r"categories" , CategoryViewSet , basename="category")
@@ -14,4 +15,8 @@ urlpatterns = [
     path("token/" , TokenObtainPairView.as_view() , name="token_obtain_pair"),
     path("token/refresh/" , TokenRefreshView.as_view() , name="token_refresh"),
     path("register/" , RegisterView.as_view() , name="register"),
+    path("cart/" , CartDetaiilView.as_view() , name="cart-detail"),
+    path("cart/add/" , AddCartItemView.as_view() , name="cart-add"),
+    path("cart/item/<int:item_id>/" , UpdateCartItemView.as_view() , name="cart-item-update"),
+    path("cart/item/<int:item_>/remove/" , RemoveCartItemView.as_view(), name="cart-item-remove"),
 ] + router.urls
