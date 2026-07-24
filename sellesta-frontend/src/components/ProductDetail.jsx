@@ -10,10 +10,22 @@ import {
   Plus,
 } from "lucide-react";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 function ProductDetail() {
   const { slug } = useParams();
-
+  const { addToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const handleAddToCart = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    addToCart(product.id, count);
+  };
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(1);
@@ -73,7 +85,6 @@ function ProductDetail() {
         <Link to="/" className="transition hover:text-blue-600">
           فروشگاه
         </Link>
-
         <ArrowRight size={15} />
 
         <span className="text-gray-700">{product.name}</span>
@@ -207,6 +218,7 @@ function ProductDetail() {
               </div>
 
               <button
+                onClick={handleAddToCart}
                 disabled={!product.available}
                 className={`
                   flex-1

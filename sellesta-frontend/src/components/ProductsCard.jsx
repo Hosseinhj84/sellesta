@@ -1,9 +1,26 @@
-import { ShoppingCart, Heart, Eye, Check, X } from "lucide-react";
+import { ShoppingCart, Heart, Eye, Check, X, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function ProductsCard({ product }) {
   const isSpecial = product.categories?.some((cat) => cat.slug === "special");
+  const { addToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    addToCart(product.id);
+  };
   return (
     <Link to={`/products/${product.slug}`}>
       <article
@@ -172,6 +189,7 @@ function ProductsCard({ product }) {
           {/* Button */}
 
           <button
+            onClick={handleAddToCart}
             disabled={!product.available}
             className={`
           mt-5
