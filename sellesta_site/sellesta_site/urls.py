@@ -16,31 +16,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include ,path
-from django.shortcuts import render
-from pages.models import Pages
+from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
-from products.models import Category
-from pages.models import Pages
-from slider.models import Slide
-from brands.models import Brand
-
-def home(request):
-    pages = Pages.objects.all()
-    categories = Category.objects.all()
-    slides = Slide.objects.filter(is_active=True).order_by("id")
-    brands = Brand.objects.filter(is_active=True)
-    return render(request, "main.html", {"pages": pages, "categories": categories , "slides" : slides , "brands": brands})
-
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/" , include("sellesta_site.api_urls")),
-    path("", home, name="home"),
-    path("products/", include("products.urls")),
-    path("members/",include("members.urls")),
-    path("", include("pages.urls")),
+    path("api/", include("sellesta_site.api_urls")),
 ]
 
 if settings.DEBUG:

@@ -37,7 +37,7 @@ export function CartProvider({ children }) {
     try {
       const res = await api.post("cart/add/", {
         product_id: productId,
-        quantity : quantity,
+        quantity: quantity,
       });
       setCart(res.data);
     } catch (err) {
@@ -48,7 +48,7 @@ export function CartProvider({ children }) {
   };
 
   const updateCartItem = async (itemId, quantity) => {
-    const res = await api.patch(`cart/item/${itemId}`, quantity);
+    const res = await api.patch(`cart/item/${itemId}/`, { quantity });
     setCart(res.data);
   };
 

@@ -64,7 +64,7 @@ class RemoveCartItemView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def delete(self , request , item_id):
-        cart , _ = Cart.objects.get(user=request.user)
+        cart , _ = Cart.objects.get_or_create(user=request.user)
         
         try:
             item = CartItem.objects.get(id=item_id , cart=cart)

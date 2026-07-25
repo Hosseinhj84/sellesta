@@ -13,7 +13,7 @@ class Cart(models.Model):
     
     @property
     def total_price(Self):
-        return sum(item.subtotal for item in Self.item.all())
+        return sum(item.subtotal for item in Self.items.all())
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart , on_delete=models.CASCADE , related_name="items")

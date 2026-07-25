@@ -18,5 +18,5 @@ urlpatterns = [
     path("cart/" , CartDetaiilView.as_view() , name="cart-detail"),
     path("cart/add/" , AddCartItemView.as_view() , name="cart-add"),
     path("cart/item/<int:item_id>/" , UpdateCartItemView.as_view() , name="cart-item-update"),
-    path("cart/item/<int:item_>/remove/" , RemoveCartItemView.as_view(), name="cart-item-remove"),
+    path("cart/item/<int:item_id>/remove/" , RemoveCartItemView.as_view(), name="cart-item-remove"),
 ] + router.urls

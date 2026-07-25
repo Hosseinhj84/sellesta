@@ -4,10 +4,13 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../api/axios";
+import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [headerLinks, setheaderLinks] = useState([]);
+  const { itemCount } = useCart();
 
   useEffect(() => {
     api
@@ -161,7 +164,8 @@ function Header() {
                 ورود / ثبت نام
               </button>
             )}
-            <button
+            <Link
+              to="/cart"
               className="
                 relative
                 rounded-xl
@@ -184,11 +188,12 @@ function Header() {
               "
             >
               سبد خرید
-              {/* Badge تستی */}
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                3
-              </span>
-            </button>
+              {itemCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
 
           {/* دکمه موبایل */}
@@ -285,18 +290,32 @@ function Header() {
             <hr className="my-2" />
 
             {user ? (
-              <button onClick={handleLogout} className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition">
+              <button
+                onClick={handleLogout}
+                className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition"
+              >
                 خروج
               </button>
             ) : (
-              <button onClick={() => navigate("/login")} className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition">
+              <button
+                onClick={() => navigate("/login")}
+                className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition"
+              >
                 ورود / ثبت نام
               </button>
             )}
 
-            <button className="rounded-xl bg-blue-600 py-3 text-white hover:bg-blue-700 transition">
+            <Link
+              to="/cart"
+              className="rounded-xl text-center bg-blue-600 py-3 text-white hover:bg-blue-700 transition"
+            >
               سبد خرید
-            </button>
+              {itemCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </nav>
         </div>
       </div>
