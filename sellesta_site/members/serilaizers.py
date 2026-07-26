@@ -25,3 +25,26 @@ class RegisterSerializer(serializers.ModelSerializer):
         Member.objects.create(user=user , phone=phone)
         
         return user
+
+class MemberProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username" , read_only=True)
+    email = serializers.EmailField(source="user.email")
+    first_name = serializers.CharField(source="user.first_name")
+    last_name = serializers.CharField(source="user.last_name")
+    
+    class Meta:
+        model = Member
+        fields = ["username" , "email" , "first_name" , "last_name" , "phone" , "joined_date"]
+    
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user" , {})
+        user = instance.user
+        
+        user.email = user_data.get("email" , user.email)
+        user.first_name = user_data.get("first_name" , user.first_name)
+        user.last_name = user_data.get("last_name" , user.last_name)
+        user.save()
+        
+        instance.phone = validated_data.get("phone" , instance.phone)
+        instance.save()
+        return instance

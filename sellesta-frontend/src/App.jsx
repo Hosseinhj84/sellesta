@@ -7,6 +7,8 @@ import ProductDetail from "./components/ProductDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
+import Profile from "./pages/Profile";
+import StaticPage from "./pages/StaticPage";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/pages/:slug/" element={<StaticPage />}/>
       </Routes>
     </div>
   );

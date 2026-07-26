@@ -9,4 +9,4 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     
     def url(self, obj):
-        return obj.redirect_url or obj.get_absolute_url()
+        return obj.redirect_url

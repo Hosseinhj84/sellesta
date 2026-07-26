@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from .models import Pages , HeaderLinks
 from rest_framework import permissions , viewsets
-from .serializers import HeaderLinksSerializers
+from .serializers import HeaderLinksSerializers , PageSerializer
 # Create your views here.
 
 def page_detail(request, slug):
@@ -12,3 +12,9 @@ class HeaderLinkViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = HeaderLinks.objects.filter(is_active=True)
     serializer_class = HeaderLinksSerializers
     permission_classes = [permissions.AllowAny]
+
+class PageViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Pages.objects.all()
+    serializer_class = PageSerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = "slug"

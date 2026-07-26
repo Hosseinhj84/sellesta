@@ -120,9 +120,16 @@ function Header() {
           {/* دکمه ها */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/profile"
+                  className="text-sm font-medium text-gray-700 hover:text-blue-600"
+                >
+                  پروفایل
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="
                 rounded-xl
                 border
                 border-gray-300
@@ -138,9 +145,10 @@ function Header() {
                 hover:text-blue-600
                 active:scale-95
               "
-              >
-                خروج
-              </button>
+                >
+                  خروج
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => navigate("/login")}
