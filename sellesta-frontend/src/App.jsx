@@ -9,6 +9,8 @@ import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import StaticPage from "./pages/StaticPage";
+import Checkout from "./pages/Checkout";
+import OrderDetail from "./pages/OrderDetail";
 
 function App() {
   return (
@@ -20,8 +22,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/pages/:slug/" element={<StaticPage />}/>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/pages/:slug/" element={<StaticPage />} />
+        <Route path="/checkout" element={<Checkout/>} /> 
+        <Route path="/orders/:id" element={<OrderDetail/>} /> 
       </Routes>
     </div>
   );

@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 function Cart() {
   const { cart, updateCartItem, removeCartItem, loading } = useCart();
-
+  const navigate = useNavigate();
   if (!cart || cart.items.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-20 text-center">
@@ -83,6 +83,7 @@ function Cart() {
       </div>
       <button
         disabled={loading}
+        onClick={() => navigate("/checkout")}
         className="mt-6 w-full rounded-xl bg-blue-600 font-medium text-white transition hover:bg-blue-700 disabled:bg-gray-300"
       >
         ادامه فرآیند خرید

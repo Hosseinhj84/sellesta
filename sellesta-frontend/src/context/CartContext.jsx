@@ -69,6 +69,7 @@ export function CartProvider({ children }) {
         updateCartItem,
         removeCartItem,
         itemCount,
+        refreshCart: fetchCart
       }}
     >
       {children}
