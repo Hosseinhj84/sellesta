@@ -1,26 +1,36 @@
 import { useState, useEffect } from "react";
-import logo from "../assets/logo.png";
+import {
+  Menu,
+  X,
+  Search,
+  ShoppingCart,
+  User,
+  LogOut,
+  ChevronDown,
+  ReceiptCent,
+} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+// import logo from "../assets/logo.png";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import api from "../api/axios";
-import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import api from "../api/axios";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [headerLinks, setheaderLinks] = useState([]);
+  const [headerLinks, setHeaderLinks] = useState([]);
+  const [search, setSearch] = useState("");
+
   const { itemCount } = useCart();
+  const { user, logout } = useAuth();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
       .get("header-links/")
-      .then((res) => setheaderLinks(res.data.results))
-      .catch((err) => console.error(err));
+      .then((res) => setHeaderLinks(res.data.results))
+      .catch((err) => console.log(err));
   }, []);
-
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -28,304 +38,524 @@ function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200/70 bg-white/80 backdrop-blur-xl shadow-sm">
-      <div className="container mx-auto px-4">
-        {/* ردیف اصلی */}
-        <div className="flex h-20 items-center justify-between gap-5">
-          {/* لوگو */}
-          <div className="flex-shrink-0">
-            <img
-              src={logo}
-              alt="Logo"
-              className="w-32 cursor-pointer transition-all duration-500 hover:scale-105 hover:rotate-1"
+    <header
+      dir="rtl"
+      className="
+      sticky
+      top-0
+      z-50
+      border-b
+      border-zinc-200
+      bg-white/90
+      backdrop-blur-xl
+      shadow-sm
+    "
+    >
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-5">
+        {/* Logo */}
+
+        <Link to="/" className="flex items-center gap-3 group shrink-0">
+          <img
+            alt="Ronin"
+            className="
+            h-14
+            w-14
+            object-contain
+            transition
+            duration-300
+            group-hover:rotate-6
+            group-hover:scale-105
+          "
+          />
+
+          <div>
+            <h1 className="text-2xl font-black tracking-wide text-zinc-900">
+              RONIN
+            </h1>
+
+            <p className="text-xs text-zinc-500">Martial Equipment</p>
+          </div>
+        </Link>
+
+        {/* Desktop Navigation */}
+
+        <nav className="hidden lg:flex items-center gap-8">
+          {headerLinks.map((item) => (
+            <Link
+              key={item.id}
+              to={item.url}
+              className="
+              relative
+              text-[15px]
+              font-semibold
+              text-zinc-700
+              transition-all
+              duration-300
+              hover:text-red-600
+
+              after:absolute
+              after:left-0
+              after:-bottom-2
+              after:h-[2px]
+              after:w-0
+              after:bg-red-600
+              after:transition-all
+              after:duration-300
+
+              hover:after:w-full
+            "
+            >
+              {item.title}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Search */}
+
+        <div className="hidden xl:flex flex-1 justify-center px-8">
+          <div className="relative w-full max-w-xl group">
+            <Search
+              size={18}
+              className="
+              absolute
+              right-4
+              top-1/2
+              -translate-y-1/2
+              text-zinc-400
+              group-focus-within:text-red-600
+            "
+            />
+
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="جستجوی لباس، دستکش، کمربند، برند..."
+              className="
+              w-full
+              rounded-2xl
+              border
+              border-zinc-300
+              bg-zinc-50
+              py-3
+              pr-11
+              pl-5
+              text-sm
+
+              outline-none
+
+              transition-all
+              duration-300
+
+              placeholder:text-zinc-400
+
+              hover:border-red-300
+
+              focus:border-red-500
+              focus:bg-white
+              focus:ring-4
+              focus:ring-red-100
+            "
             />
           </div>
-
-          {/* سرچ */}
-          <div className="hidden lg:flex flex-1 justify-center">
-            <div className="relative w-full max-w-2xl group">
-              {/* آیکون سرچ */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-4.3-4.3m1.3-5.2a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-
-              <input
-                type="text"
-                placeholder="جستجوی محصول، برند و..."
-                className="
-                  w-full
-                  rounded-2xl
-                  border
-                  border-gray-200
-                  bg-gray-50
-                  py-3
-                  pr-5
-                  pl-14
-                  text-sm
-                  outline-none
-                  transition-all
-                  duration-300
-                  placeholder:text-gray-400
-                  focus:border-blue-500
-                  focus:bg-white
-                  focus:ring-4
-                  focus:ring-blue-100
-                  focus:shadow-xl
-                "
-              />
-            </div>
-          </div>
-
-          {/* منوی دسکتاپ */}
-          <nav className="hidden xl:flex items-center gap-8">
-            {headerLinks.map((item) => (
-              <a
-                key={item.id}
-                href={item.url}
-                className="
-                  relative
-                  text-gray-700
-                  font-medium
-                  transition-all
-                  duration-300
-                  hover:text-blue-600
-
-                  after:absolute
-                  after:left-0
-                  after:-bottom-1
-                  after:h-[2px]
-                  after:w-0
-                  after:bg-blue-600
-                  after:transition-all
-                  after:duration-300
-
-                  hover:after:w-full
-                "
-              >
-                {item.title}
-              </a>
-            ))}
-          </nav>
-
-          {/* دکمه ها */}
-          <div className="hidden md:flex items-center gap-3">
-            {user ? (
-              <div className="flex items-center gap-3">
-                <Link
-                  to="/profile"
-                  className="text-sm font-medium text-gray-700 hover:text-blue-600"
-                >
-                  پروفایل
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="
-                rounded-xl
-                border
-                border-gray-300
-                px-5
-                py-2.5
-                text-sm
-                font-medium
-                transition-all
-                duration-300
-                hover:-translate-y-0.5
-                hover:border-blue-500
-                hover:bg-blue-50
-                hover:text-blue-600
-                active:scale-95
-              "
-                >
-                  خروج
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => navigate("/login")}
-                className="
-                rounded-xl
-                border
-                border-gray-300
-                px-5
-                py-2.5
-                text-sm
-                font-medium
-                transition-all
-                duration-300
-                hover:-translate-y-0.5
-                hover:border-blue-500
-                hover:bg-blue-50
-                hover:text-blue-600
-                active:scale-95
-              "
-              >
-                ورود / ثبت نام
-              </button>
-            )}
-            <Link
-              to="/cart"
-              className="
-                relative
-                rounded-xl
-                bg-gradient-to-r
-                from-blue-600
-                to-indigo-600
-                px-5
-                py-2.5
-                text-sm
-                font-medium
-                text-white
-                shadow-lg
-                shadow-blue-500/20
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:shadow-xl
-                hover:shadow-blue-500/30
-                active:scale-95
-              "
-            >
-              سبد خرید
-              {itemCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-          </div>
-
-          {/* دکمه موبایل */}
-          <button
-            className="lg:hidden rounded-lg p-2 hover:bg-gray-100 transition"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            )}
-          </button>
         </div>
 
-        {/* سرچ موبایل */}
-        <div className="pb-4 lg:hidden">
+        {/* Right Actions */}
+
+        <div className="hidden md:flex items-center gap-3">
+          <Link
+            to="/cart"
+            className="
+            relative
+            flex
+            items-center
+            gap-2
+
+            rounded-2xl
+
+            bg-zinc-900
+
+            px-5
+            py-3
+
+            text-sm
+            font-semibold
+            text-white
+
+            transition-all
+            duration-300
+
+            hover:-translate-y-1
+            hover:bg-red-600
+            hover:shadow-xl
+            hover:shadow-red-200
+          "
+          >
+            <ShoppingCart size={18} />
+            سبد خرید
+            {itemCount > 0 && (
+              <span
+                className="
+                absolute
+                -top-2
+                -left-2
+
+                flex
+                h-6
+                w-6
+                items-center
+                justify-center
+
+                rounded-full
+
+                bg-red-600
+
+                text-xs
+                font-bold
+                text-white
+              "
+              >
+                {itemCount}
+              </span>
+            )}
+          </Link>
+
+          {user ? (
+            <>
+              <Link
+                to="/profile"
+                className="
+                flex
+                items-center
+                gap-2
+
+                rounded-2xl
+
+                border
+                border-zinc-300
+
+                px-4
+                py-3
+
+                text-sm
+                font-medium
+
+                transition-all
+
+                hover:border-red-500
+                hover:text-red-600
+                hover:bg-red-50
+              "
+              >
+                <User size={18} />
+                پروفایل
+              </Link>
+
+              <Link
+                to="/my-orders"
+                className="
+                flex
+                items-center
+                gap-2
+
+                rounded-2xl
+
+                border
+                border-zinc-300
+
+                px-4
+                py-3
+
+                text-sm
+                font-medium
+
+                transition-all
+
+                hover:border-red-500
+                hover:text-red-600
+                hover:bg-red-50
+              "
+              >
+                <ReceiptCent size={18} />
+                سفارش های من
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="
+                flex
+                items-center
+                gap-2
+
+                rounded-2xl
+
+                border
+                border-zinc-300
+
+                px-4
+                py-3
+
+                text-sm
+                font-medium
+
+                transition-all
+
+                hover:bg-zinc-900
+                hover:text-white
+              "
+              >
+                <LogOut size={18} />
+                خروج
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/login")}
+              className="
+              rounded-2xl
+
+              border
+              border-zinc-900
+
+              px-5
+              py-3
+
+              text-sm
+              font-semibold
+
+              transition-all
+              duration-300
+
+              hover:bg-zinc-900
+              hover:text-white
+            "
+            >
+              ورود | ثبت نام
+            </button>
+          )}
+          {/* Mobile Menu Button */}
+
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="
+            flex
+            h-12
+            w-12
+            items-center
+            justify-center
+            rounded-2xl
+            border
+            border-zinc-300
+            transition-all
+            duration-300
+            hover:border-red-500
+            hover:bg-red-50
+            lg:hidden
+          "
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Search */}
+
+      <div className="border-t border-zinc-200 bg-white px-5 py-4 xl:hidden">
+        <div className="relative">
+          <Search
+            size={18}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400"
+          />
+
           <input
             type="text"
-            placeholder="جستجوی محصول..."
+            placeholder="جستجوی محصولات..."
             className="
               w-full
-              rounded-xl
+              rounded-2xl
               border
-              border-gray-200
-              bg-gray-50
-              p-3
+              border-zinc-300
+              bg-zinc-50
+              py-3
+              pr-11
+              pl-4
               outline-none
               transition-all
               duration-300
-              focus:border-blue-500
+              focus:border-red-500
               focus:bg-white
               focus:ring-4
-              focus:ring-blue-100
+              focus:ring-red-100
             "
           />
         </div>
+      </div>
 
-        {/* منوی موبایل */}
-        <div
-          className={`
-            overflow-hidden
-            transition-all
-            duration-500
-            lg:hidden
-            ${menuOpen ? "max-h-96 pb-5" : "max-h-0"}
-          `}
-        >
-          <nav className="flex flex-col gap-2">
-            {headerLinks.map((item) => (
-              <a
-                key={item.id}
-                href={item.url}
+      {/* Mobile Menu */}
+
+      <div
+        className={`
+          overflow-hidden
+          transition-all
+          duration-500
+          lg:hidden
+
+          ${menuOpen ? "max-h-[700px] border-t border-zinc-200" : "max-h-0"}
+        `}
+      >
+        <div className="space-y-2 bg-white px-5 py-5">
+          {headerLinks.map((item) => (
+            <Link
+              key={item.id}
+              to={item.url}
+              onClick={() => setMenuOpen(false)}
+              className="
+                flex
+                items-center
+                justify-between
+
+                rounded-2xl
+
+                px-4
+                py-4
+
+                font-medium
+                text-zinc-700
+
+                transition-all
+                duration-300
+
+                hover:bg-red-50
+                hover:text-red-600
+              "
+            >
+              {item.title}
+
+              <ChevronDown size={18} className="-rotate-90" />
+            </Link>
+          ))}
+
+          <div className="my-4 h-px bg-zinc-200"></div>
+
+          {user ? (
+            <>
+              <Link
+                to="/profile"
+                onClick={() => setMenuOpen(false)}
                 className="
-                  rounded-xl
+                  flex
+                  items-center
+                  gap-3
+
+                  rounded-2xl
+
+                  border
+                  border-zinc-300
+
                   px-4
-                  py-3
+                  py-4
+
                   transition-all
-                  duration-300
-                  hover:bg-blue-50
-                  hover:text-blue-600
+
+                  hover:border-red-500
+                  hover:bg-red-50
                 "
               >
-                {item.title}
-              </a>
-            ))}
+                <User size={20} />
+                پروفایل
+              </Link>
 
-            <hr className="my-2" />
-
-            {user ? (
               <button
-                onClick={handleLogout}
-                className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition"
-              >
-                خروج
-              </button>
-            ) : (
-              <button
-                onClick={() => navigate("/login")}
-                className="rounded-xl border border-gray-300 py-3 hover:bg-gray-100 transition"
-              >
-                ورود / ثبت نام
-              </button>
-            )}
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
+                className="
+                  flex
+                  w-full
+                  items-center
+                  gap-3
 
-            <Link
-              to="/cart"
-              className="rounded-xl text-center bg-blue-600 py-3 text-white hover:bg-blue-700 transition"
+                  rounded-2xl
+
+                  border
+                  border-zinc-300
+
+                  px-4
+                  py-4
+
+                  transition-all
+
+                  hover:bg-zinc-900
+                  hover:text-white
+                "
+              >
+                <LogOut size={20} />
+                خروج از حساب
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => {
+                navigate("/login");
+                setMenuOpen(false);
+              }}
+              className="
+                w-full
+
+                rounded-2xl
+
+                bg-zinc-900
+
+                py-4
+
+                font-semibold
+                text-white
+
+                transition-all
+                duration-300
+
+                hover:bg-red-600
+              "
             >
-              سبد خرید
-              {itemCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-          </nav>
+              ورود | ثبت نام
+            </button>
+          )}
+
+          <Link
+            to="/cart"
+            onClick={() => setMenuOpen(false)}
+            className="
+              mt-3
+
+              flex
+              items-center
+              justify-center
+              gap-2
+
+              rounded-2xl
+
+              bg-red-600
+
+              py-4
+
+              font-semibold
+              text-white
+
+              transition-all
+              duration-300
+
+              hover:bg-zinc-900
+            "
+          >
+            <ShoppingCart size={20} />
+            سبد خرید
+            {itemCount > 0 && (
+              <span className="rounded-full bg-white px-2 py-1 text-xs font-bold text-red-600">
+                {itemCount}
+              </span>
+            )}
+          </Link>
         </div>
       </div>
     </header>

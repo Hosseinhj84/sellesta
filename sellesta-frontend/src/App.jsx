@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import StaticPage from "./pages/StaticPage";
 import Checkout from "./pages/Checkout";
 import OrderDetail from "./pages/OrderDetail";
+import MyOrders from "./pages/MyOrder";
 
 function App() {
   return (
@@ -24,8 +25,9 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/pages/:slug/" element={<StaticPage />} />
-        <Route path="/checkout" element={<Checkout/>} /> 
-        <Route path="/orders/:id" element={<OrderDetail/>} /> 
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders/:id" element={<OrderDetail />} />
+        <Route path="/my-orders" element={<MyOrders />} />
       </Routes>
     </div>
   );

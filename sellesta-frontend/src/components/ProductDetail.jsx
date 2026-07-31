@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   ShoppingCart,
@@ -8,24 +8,23 @@ import {
   Check,
   Minus,
   Plus,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
 } from "lucide-react";
+
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-import { useNavigate } from "react-router-dom";
 
 function ProductDetail() {
   const { slug } = useParams();
-  const { addToCart } = useCart();
-  const { user } = useAuth();
+
   const navigate = useNavigate();
-  const handleAddToCart = () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    addToCart(product.id, count);
-  };
+
+  const { user } = useAuth();
+  const { addToCart } = useCart();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(1);
@@ -38,18 +37,31 @@ function ProductDetail() {
       .finally(() => setLoading(false));
   }, [slug]);
 
+  const handleAddToCart = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    addToCart(product.id, count);
+  };
+
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl animate-pulse px-4 py-12">
-        <div className="grid gap-10 md:grid-cols-2">
-          <div className="aspect-square rounded-3xl bg-gray-200"></div>
+      <div className="mx-auto max-w-7xl animate-pulse px-5 py-12">
+        <div className="grid gap-10 lg:grid-cols-2">
+          <div className="aspect-square rounded-[30px] bg-zinc-200"></div>
 
           <div className="space-y-5">
-            <div className="h-8 w-2/3 rounded bg-gray-200"></div>
-            <div className="h-4 w-full rounded bg-gray-200"></div>
-            <div className="h-4 w-5/6 rounded bg-gray-200"></div>
-            <div className="h-10 w-40 rounded bg-gray-200"></div>
-            <div className="h-14 w-full rounded-2xl bg-gray-200"></div>
+            <div className="h-8 w-2/3 rounded-xl bg-zinc-200"></div>
+
+            <div className="h-4 w-full rounded-xl bg-zinc-200"></div>
+
+            <div className="h-4 w-5/6 rounded-xl bg-zinc-200"></div>
+
+            <div className="h-40 rounded-3xl bg-zinc-200"></div>
+
+            <div className="h-14 rounded-2xl bg-zinc-200"></div>
           </div>
         </div>
       </div>
@@ -58,12 +70,27 @@ function ProductDetail() {
 
   if (!product) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-        <h2 className="text-3xl font-bold text-gray-800">محصول پیدا نشد</h2>
+      <div className="flex min-h-[70vh] flex-col items-center justify-center px-5 text-center">
+        <h2 className="text-4xl font-black text-zinc-900">محصول پیدا نشد</h2>
+
+        <p className="mt-3 text-zinc-500">
+          ممکن است این محصول حذف شده باشد یا آدرس آن اشتباه باشد.
+        </p>
 
         <Link
           to="/"
-          className="mt-6 rounded-xl bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700"
+          className="
+            mt-8
+            rounded-2xl
+            bg-zinc-900
+            px-8
+            py-3
+            font-semibold
+            text-white
+            transition-all
+            duration-300
+            hover:bg-red-600
+          "
         >
           بازگشت به فروشگاه
         </Link>
@@ -78,92 +105,222 @@ function ProductDetail() {
   const isSpecial = product.categories?.some((cat) => cat.slug === "special");
 
   return (
-    <main className="mx-auto max-w-7xl px-5 py-10" dir="rtl">
+    <main dir="rtl" className="mx-auto max-w-7xl px-5 py-8 lg:py-12">
       {/* Breadcrumb */}
 
-      <div className="mb-8 flex items-center gap-2 text-sm text-gray-500">
-        <Link to="/" className="transition hover:text-blue-600">
+      <div className="mb-10 flex flex-wrap items-center gap-2 text-sm">
+        <Link
+          to="/"
+          className="
+            text-zinc-500
+            transition
+            hover:text-red-600
+          "
+        >
           فروشگاه
         </Link>
-        <ArrowRight size={15} />
 
-        <span className="text-gray-700">{product.name}</span>
+        <ArrowRight size={15} className="text-zinc-400" />
+
+        <span className="font-medium text-zinc-800">{product.name}</span>
       </div>
 
       <div className="grid gap-12 lg:grid-cols-2">
-        {/* IMAGE */}
+        {/* LEFT SIDE */}
 
-        <div>
+        <section>
           <div
             className="
-            group
-            overflow-hidden
-            rounded-[30px]
-            border
-            border-gray-200
-            bg-gradient-to-br
-            from-gray-50
-            to-white
-            shadow-sm
+              group
+              relative
+              overflow-hidden
+
+              rounded-[32px]
+
+              border
+              border-zinc-200
+
+              bg-gradient-to-br
+              from-zinc-50
+              to-white
+
+              shadow-sm
+
+              transition-all
+              duration-500
+
+              hover:shadow-2xl
+              hover:shadow-red-100
             "
           >
             <img
               src={imageSrc}
               alt={product.name}
               className="
-              aspect-square
-              w-full
-              object-cover
-              transition-transform
-              duration-500
-              group-hover:scale-105
+                aspect-square
+                w-full
+                object-cover
+
+                transition-all
+                duration-700
+
+                group-hover:scale-110
               "
             />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+
+            {isSpecial && (
+              <div
+                className="
+                  absolute
+                  left-5
+                  top-5
+
+                  rounded-full
+
+                  bg-red-600
+
+                  px-4
+                  py-2
+
+                  text-xs
+                  font-bold
+
+                  text-white
+
+                  shadow-xl
+                "
+              >
+                🔥 پیشنهاد رونین
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* INFO */}
+          {/* اینجا در آینده Thumbnail Gallery اضافه می‌کنیم */}
+        </section>
 
-        <div>
+        {/* RIGHT SIDE */}
+
+        <section className="space-y-7">
+          {/* Status */}
+
           <div className="flex flex-wrap items-center gap-3">
-            {product.available && (
-              <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-600">
-                <Check size={15} />
-                موجود
+            {product.available ? (
+              <span
+                className="
+                inline-flex
+                items-center
+                gap-2
+
+                rounded-full
+
+                bg-emerald-50
+
+                px-4
+                py-2
+
+                text-sm
+                font-semibold
+
+                text-emerald-700
+              "
+              >
+                <Check size={16} />
+                موجود در انبار
+              </span>
+            ) : (
+              <span
+                className="
+                inline-flex
+                items-center
+                gap-2
+
+                rounded-full
+
+                bg-red-50
+
+                px-4
+                py-2
+
+                text-sm
+                font-semibold
+
+                text-red-600
+              "
+              >
+                موجود نیست
               </span>
             )}
 
             {isSpecial && (
-              <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-700">
-                ویژه
+              <span
+                className="
+                rounded-full
+
+                bg-red-600
+
+                px-4
+                py-2
+
+                text-sm
+                font-bold
+
+                text-white
+              "
+              >
+                پیشنهاد رونین
               </span>
             )}
           </div>
 
-          <h1 className="mt-5 text-3xl font-extrabold leading-relaxed text-gray-900">
+          {/* Product Name */}
+
+          <h1
+            className="
+            text-3xl
+
+            font-black
+
+            leading-relaxed
+
+            text-zinc-900
+
+            lg:text-4xl
+          "
+          >
             {product.name}
           </h1>
 
           {/* Categories */}
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             {product.categories?.map((cat) => (
               <span
                 key={cat.id}
                 className="
                 rounded-full
+
                 border
-                border-gray-200
-                bg-gray-50
+                border-zinc-200
+
+                bg-zinc-50
+
                 px-4
-                py-1.5
+                py-2
+
                 text-sm
-                text-gray-600
-                transition
-                hover:border-blue-400
-                hover:bg-blue-50
-                hover:text-blue-600
-                "
+
+                text-zinc-700
+
+                transition-all
+
+                duration-300
+
+                hover:border-red-500
+                hover:bg-red-50
+                hover:text-red-600
+              "
               >
                 {cat.name}
               </span>
@@ -172,46 +329,112 @@ function ProductDetail() {
 
           {/* Description */}
 
-          <div className="mt-8">
-            <h3 className="mb-3 text-lg font-bold text-gray-900">توضیحات</h3>
+          <div>
+            <h2 className="mb-4 text-xl font-bold text-zinc-900">
+              توضیحات محصول
+            </h2>
 
-            <p className="leading-8 text-gray-600">
+            <p
+              className="
+              leading-9
+
+              text-zinc-600
+            "
+            >
               {product.description?.trim()
                 ? product.description
-                : "توضیحاتی برای این محصول ثبت نشده است."}
+                : "برای این محصول هنوز توضیحاتی ثبت نشده است."}
             </p>
           </div>
 
-          {/* Price */}
+          {/* Price Card */}
 
-          <div className="mt-10 rounded-3xl border border-gray-200 bg-gray-50 p-6">
-            <span className="text-sm text-gray-500">قیمت محصول</span>
+          <div
+            className="
+            rounded-[30px]
 
-            <div className="mt-2 flex items-end gap-2">
-              <h2 className="text-4xl font-extrabold text-gray-900">
+            border
+            border-zinc-200
+
+            bg-zinc-50
+
+            p-7
+          "
+          >
+            <span className="text-sm text-zinc-500">قیمت نهایی</span>
+
+            <div className="mt-3 flex items-end gap-2">
+              <h2
+                className="
+                text-5xl
+
+                font-black
+
+                tracking-tight
+
+                text-zinc-900
+              "
+              >
                 {Number(product.price).toLocaleString("fa-IR")}
               </h2>
 
-              <span className="pb-1 text-gray-500">تومان</span>
+              <span className="pb-2 text-zinc-500">تومان</span>
             </div>
+
             {/* Quantity */}
 
             <div className="mt-8 flex flex-wrap items-center gap-5">
-              <div className="flex items-center overflow-hidden rounded-2xl border border-gray-200">
+              <div
+                className="
+                flex
+                items-center
+
+                overflow-hidden
+
+                rounded-2xl
+
+                border
+                border-zinc-200
+
+                bg-white
+              "
+              >
                 <button
                   onClick={() => setCount((prev) => Math.max(1, prev - 1))}
-                  className="p-4 transition hover:bg-gray-100"
+                  className="
+                  p-4
+
+                  transition
+
+                  hover:bg-zinc-100
+                "
                 >
                   <Minus size={18} />
                 </button>
 
-                <span className="min-w-14 text-center text-lg font-bold">
+                <span
+                  className="
+                  min-w-[60px]
+
+                  text-center
+
+                  text-lg
+
+                  font-bold
+                "
+                >
                   {count}
                 </span>
 
                 <button
                   onClick={() => setCount((prev) => prev + 1)}
-                  className="p-4 transition hover:bg-gray-100"
+                  className="
+                  p-4
+
+                  transition
+
+                  hover:bg-zinc-100
+                "
                 >
                   <Plus size={18} />
                 </button>
@@ -221,17 +444,36 @@ function ProductDetail() {
                 onClick={handleAddToCart}
                 disabled={!product.available}
                 className={`
-                  flex-1
-                  rounded-2xl
-                  py-4
-                  font-semibold
-                  transition-all
-                  duration-300
-                  ${
-                    product.available
-                      ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:scale-[0.98]"
-                      : "cursor-not-allowed bg-gray-200 text-gray-500"
-                  }
+                flex-1
+
+                rounded-2xl
+
+                py-4
+
+                font-bold
+
+                transition-all
+
+                duration-300
+
+                ${
+                  product.available
+                    ? `
+                      bg-zinc-900
+                      text-white
+
+                      hover:bg-red-600
+                      hover:shadow-xl
+                      hover:shadow-red-200
+
+                      active:scale-95
+                    `
+                    : `
+                      cursor-not-allowed
+                      bg-zinc-200
+                      text-zinc-500
+                    `
+                }
                 `}
               >
                 <span className="flex items-center justify-center gap-2">
@@ -241,23 +483,32 @@ function ProductDetail() {
               </button>
             </div>
 
-            {/* Actions */}
+            {/* Action Buttons */}
 
             <div className="mt-6 flex gap-3">
               <button
                 className="
                 flex
+
                 h-12
                 w-12
+
                 items-center
                 justify-center
+
                 rounded-2xl
+
                 border
-                border-gray-200
-                transition
-                hover:border-red-400
+                border-zinc-200
+
+                bg-white
+
+                transition-all
+
+                hover:border-red-500
                 hover:bg-red-50
-                "
+                hover:text-red-600
+              "
               >
                 <Heart size={20} />
               </button>
@@ -265,50 +516,112 @@ function ProductDetail() {
               <button
                 className="
                 flex
+
                 h-12
                 w-12
+
                 items-center
                 justify-center
+
                 rounded-2xl
+
                 border
-                border-gray-200
-                transition
-                hover:border-blue-400
-                hover:bg-blue-50
-                "
+                border-zinc-200
+
+                bg-white
+
+                transition-all
+
+                hover:border-zinc-900
+                hover:bg-zinc-900
+                hover:text-white
+              "
               >
                 <Share2 size={20} />
               </button>
             </div>
+          </div>
 
-            {/* Shipping Card */}
+          {/* Service Cards */}
 
-            <div className="mt-10 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="font-bold text-gray-800">اطلاعات ارسال</h3>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div
+              className="
+              rounded-3xl
+              border
+              border-zinc-200
+              bg-white
+              p-5
 
-              <div className="mt-5 space-y-4 text-sm text-gray-600">
-                <div className="flex items-center justify-between">
-                  <span>ارسال</span>
-                  <span className="font-medium text-gray-900">
-                    ۲ تا ۵ روز کاری
-                  </span>
-                </div>
+              transition-all
+              duration-300
 
-                <div className="flex items-center justify-between">
-                  <span>ضمانت</span>
-                  <span className="font-medium text-gray-900">
-                    ضمانت اصالت کالا
-                  </span>
-                </div>
+              hover:-translate-y-1
+              hover:border-red-500
+              hover:shadow-lg
+            "
+            >
+              <Truck size={24} className="text-red-600" />
 
-                <div className="flex items-center justify-between">
-                  <span>پشتیبانی</span>
-                  <span className="font-medium text-gray-900">۲۴ ساعته</span>
-                </div>
-              </div>
+              <h3 className="mt-4 font-bold text-zinc-900">ارسال سریع</h3>
+
+              <p className="mt-2 text-sm leading-7 text-zinc-500">
+                ارسال سفارش بین ۲ تا ۵ روز کاری به سراسر کشور.
+              </p>
+            </div>
+
+            <div
+              className="
+              rounded-3xl
+              border
+              border-zinc-200
+              bg-white
+              p-5
+
+              transition-all
+              duration-300
+
+              hover:-translate-y-1
+              hover:border-red-500
+              hover:shadow-lg
+            "
+            >
+              <ShieldCheck size={24} className="text-red-600" />
+
+              <h3 className="mt-4 font-bold text-zinc-900">ضمانت اصالت</h3>
+
+              <p className="mt-2 text-sm leading-7 text-zinc-500">
+                تمامی محصولات رونین با ضمانت اصالت کالا عرضه می‌شوند.
+              </p>
+            </div>
+
+            <div
+              className="
+              rounded-3xl
+              border
+              border-zinc-200
+              bg-white
+              p-5
+
+              transition-all
+              duration-300
+
+              hover:-translate-y-1
+              hover:border-red-500
+              hover:shadow-lg
+            "
+            >
+              <RotateCcw size={24} className="text-red-600" />
+
+              <h3 className="mt-4 font-bold text-zinc-900">بازگشت کالا</h3>
+
+              <p className="mt-2 text-sm leading-7 text-zinc-500">
+                در صورت وجود مشکل، امکان بازگشت کالا طبق قوانین فروشگاه فراهم
+                است.
+              </p>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   );
