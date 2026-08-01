@@ -5,13 +5,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView , TokenRefreshVie
 from pages.views import HeaderLinkViewSet , PageViewSet
 from members.views import RegisterView , ProfileView
 from cart.views import CartDetaiilView , AddCartItemView , UpdateCartItemView , RemoveCartItemView
-from orders.views import CreateOrderView , OrderListView
+from orders.views import CreateOrderView , OrderListView , AdminOrderViewSet
 
 router = DefaultRouter()
 router.register(r"categories" , CategoryViewSet , basename="category")
 router.register(r"products" , ProductsViewSet , basename="product")
 router.register(r"header-links" , HeaderLinkViewSet , basename="header-links")
 router.register(r"pages" , PageViewSet , basename="pages")
+router.register(r"admin/orders" , AdminOrderViewSet , basename="admin-order")
 
 urlpatterns = [
     path("token/" , TokenObtainPairView.as_view() , name="token_obtain_pair"),

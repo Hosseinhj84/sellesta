@@ -21,3 +21,16 @@ class CreateOrderSerializer(serializers.Serializer):
     address = serializers.CharField()
     postal_code = serializers.CharField(max_length=20,required=False , allow_blank=True)
 
+class AdminOrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True , read_only = True)
+    username = serializers.CharField(source="user.username" , read_only=True)
+    
+    class Meta:
+        model = Order
+        fields = [
+            "id" , "username" , "status" , "full_name" , "phone" , "address" , "postal_code" , "total_price" , "items" , "created",
+        ]
+        
+        read_only_fields = [
+            "username" , "full_name" , "phone" , "address" , "postaal_code" , "total_price" , "items" , "created",
+        ]

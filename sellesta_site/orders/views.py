@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from rest_framework import permissions , status
+from rest_framework import permissions , status , viewsets
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from django.db import transaction
 from .models import Order , OrderItem
-from .serializers import OrderSerializer , CreateOrderSerializer
+from .serializers import OrderSerializer , CreateOrderSerializer , AdminOrderSerializer
 from cart.models import Cart
 
 # Create your views here.
@@ -57,3 +58,8 @@ class OrderListView(APIView):
         orders = Order.objects.filter(user=request.user)
         serializer = OrderSerializer(orders , many=True)
         return Response(serializer.data)
+
+class AdminOrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all().order_by("-created")
+    serializer_class = AdminOrderSerializer
+    permission_classes = [IsAdminUser]

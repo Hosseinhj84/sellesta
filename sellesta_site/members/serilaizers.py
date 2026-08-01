@@ -31,10 +31,11 @@ class MemberProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email")
     first_name = serializers.CharField(source="user.first_name")
     last_name = serializers.CharField(source="user.last_name")
+    is_staff = serializers.BooleanField(source="user.is_staff" , read_only=True)
     
     class Meta:
         model = Member
-        fields = ["username" , "email" , "first_name" , "last_name" , "phone" , "joined_date"]
+        fields = ["username" , "email" , "first_name" , "last_name" , "phone" , "joined_date" , "is_staff"]
     
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user" , {})

@@ -12,6 +12,9 @@ import StaticPage from "./pages/StaticPage";
 import Checkout from "./pages/Checkout";
 import OrderDetail from "./pages/OrderDetail";
 import MyOrders from "./pages/MyOrder";
+import AdminLayout from "./components/AdminLayout";
+import AdminRoute from "./components/AdminRoute";
+import AdminOrders from "./pages/admin/AdminOrder";
 
 function App() {
   return (
@@ -28,6 +31,15 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders/:id" element={<OrderDetail />} />
         <Route path="/my-orders" element={<MyOrders />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        />
+        <Route path="orders" element={<AdminOrders />} />
       </Routes>
     </div>
   );
