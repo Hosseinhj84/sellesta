@@ -11,6 +11,8 @@ import {
   ShieldCheck,
   Truck,
   RotateCcw,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import api from "../api/axios";
@@ -28,6 +30,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     api
@@ -98,9 +101,14 @@ function ProductDetail() {
     );
   }
 
-  const imageSrc = product.image?.startsWith("http")
-    ? product.image
-    : `http://127.0.0.1:8000${product.image}`;
+  const allImages = [
+    product.image,
+    ...(product.gallery || []).map((g) => g.image),
+  ];
+
+  const imageSrc = allImages[activeImageIndex]?.startsWith("http")
+    ? allImages[activeImageIndex]
+    : `http://127.0.0.1:8000/${allImages[activeImageIndex]}`;
 
   const isSpecial = product.categories?.some((cat) => cat.slug === "special");
 
@@ -131,41 +139,41 @@ function ProductDetail() {
         <section>
           <div
             className="
-              group
-              relative
-              overflow-hidden
+      group
+      relative
+      overflow-hidden
 
-              rounded-[32px]
+      rounded-[32px]
 
-              border
-              border-zinc-200
+      border
+      border-zinc-200
 
-              bg-gradient-to-br
-              from-zinc-50
-              to-white
+      bg-gradient-to-br
+      from-zinc-50
+      to-white
 
-              shadow-sm
+      shadow-sm
 
-              transition-all
-              duration-500
+      transition-all
+      duration-500
 
-              hover:shadow-2xl
-              hover:shadow-red-100
-            "
+      hover:shadow-2xl
+      hover:shadow-red-100
+    "
           >
             <img
               src={imageSrc}
               alt={product.name}
               className="
-                aspect-square
-                w-full
-                object-cover
+        aspect-square
+        w-full
+        object-cover
 
-                transition-all
-                duration-700
+        transition-all
+        duration-700
 
-                group-hover:scale-110
-              "
+        group-hover:scale-110
+      "
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
@@ -173,31 +181,151 @@ function ProductDetail() {
             {isSpecial && (
               <div
                 className="
-                  absolute
-                  left-5
-                  top-5
+          absolute
+          left-5
+          top-5
 
-                  rounded-full
+          rounded-full
 
-                  bg-red-600
+          bg-red-600
 
-                  px-4
-                  py-2
+          px-4
+          py-2
 
-                  text-xs
-                  font-bold
+          text-xs
+          font-bold
 
-                  text-white
+          text-white
 
-                  shadow-xl
-                "
+          shadow-xl
+        "
               >
                 🔥 پیشنهاد رونین
               </div>
             )}
+
+            {/* دکمه‌های فلش، فقط وقتی بیشتر از یه عکس داریم */}
+            {allImages.length > 1 && (
+              <>
+                <button
+                  onClick={() =>
+                    setActiveImageIndex((prev) =>
+                      prev === 0 ? allImages.length - 1 : prev - 1,
+                    )
+                  }
+                  className="
+            absolute
+            right-4
+            top-1/2
+
+            flex
+            h-10
+            w-10
+            -translate-y-1/2
+            items-center
+            justify-center
+
+            rounded-full
+
+            bg-white/90
+            opacity-0
+
+            shadow-lg
+
+            backdrop-blur-sm
+
+            transition-all
+            duration-300
+
+            hover:bg-white
+            group-hover:opacity-100
+          "
+                >
+                  <ChevronRight size={18} />
+                </button>
+
+                <button
+                  onClick={() =>
+                    setActiveImageIndex((prev) =>
+                      prev === allImages.length - 1 ? 0 : prev + 1,
+                    )
+                  }
+                  className="
+            absolute
+            left-4
+            top-1/2
+
+            flex
+            h-10
+            w-10
+            -translate-y-1/2
+            items-center
+            justify-center
+
+            rounded-full
+
+            bg-white/90
+            opacity-0
+
+            shadow-lg
+
+            backdrop-blur-sm
+
+            transition-all
+            duration-300
+
+            hover:bg-white
+            group-hover:opacity-100
+          "
+                >
+                  <ChevronLeft size={18} />
+                </button>
+              </>
+            )}
           </div>
 
-          {/* اینجا در آینده Thumbnail Gallery اضافه می‌کنیم */}
+          {/* Thumbnail Gallery */}
+          {allImages.length > 1 && (
+            <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+              {allImages.map((img, index) => {
+                const thumbSrc = img?.startsWith("http")
+                  ? img
+                  : `http://127.0.0.1:8000/${img}`;
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setActiveImageIndex(index)}
+                    className={`
+              h-16
+              w-16
+              shrink-0
+              overflow-hidden
+
+              rounded-2xl
+
+              border-2
+
+              transition-all
+              duration-300
+
+              ${
+                index === activeImageIndex
+                  ? "border-red-600 shadow-md shadow-red-100"
+                  : "border-zinc-200 opacity-70 hover:opacity-100"
+              }
+            `}
+                  >
+                    <img
+                      src={thumbSrc}
+                      alt={`${product.name} ${index + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* RIGHT SIDE */}

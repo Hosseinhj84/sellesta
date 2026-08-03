@@ -50,3 +50,14 @@ class Products(models.Model):
 
     def __str__(self):
         return self.name
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Products , on_delete=models.CASCADE , related_name="gallery")
+    image = models.ImageField(upload_to="products/gallery")
+    order = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        ordering = ["order"]
+    
+    def __str__(self):
+        return f"عکس {self.product.name}"

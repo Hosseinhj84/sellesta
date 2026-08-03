@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 function AdminRoute({ children }){
     const { user , loading} = useAuth();
 
-    if(!loading){
+    if(loading){
         return <div className="p-10 text-center">درحال بررسی دسترسی...</div>;
     }
 

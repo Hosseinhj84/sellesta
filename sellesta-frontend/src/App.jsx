@@ -15,6 +15,8 @@ import MyOrders from "./pages/MyOrder";
 import AdminLayout from "./components/AdminLayout";
 import AdminRoute from "./components/AdminRoute";
 import AdminOrders from "./pages/admin/AdminOrder";
+import AdminProducts from "./pages/admin/AdminProduct";
+import AdminProductForms from "./pages/admin/AdminProductForm";
 
 function App() {
   return (
@@ -38,8 +40,12 @@ function App() {
               <AdminLayout />
             </AdminRoute>
           }
-        />
-        <Route path="orders" element={<AdminOrders />} />
+        >
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="products/new" element={<AdminProductForms/>}/>
+          <Route path="products/:slug/edit" element={<AdminProductForms/>}/>
+        </Route>
       </Routes>
     </div>
   );
