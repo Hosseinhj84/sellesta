@@ -17,6 +17,8 @@ import AdminRoute from "./components/AdminRoute";
 import AdminOrders from "./pages/admin/AdminOrder";
 import AdminProducts from "./pages/admin/AdminProduct";
 import AdminProductForms from "./pages/admin/AdminProductForm";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminCategoryForm from "./pages/admin/AdminCategoriesForm";
 
 function App() {
   return (
@@ -43,8 +45,11 @@ function App() {
         >
           <Route path="orders" element={<AdminOrders />} />
           <Route path="products" element={<AdminProducts />} />
-          <Route path="products/new" element={<AdminProductForms/>}/>
-          <Route path="products/:slug/edit" element={<AdminProductForms/>}/>
+          <Route path="products/new" element={<AdminProductForms />} />
+          <Route path="products/:slug/edit" element={<AdminProductForms />} />
+          <Route path="categories/" element={<AdminCategories />} />
+          <Route path="categories/new" element={<AdminCategoryForm />} />
+          <Route path="categories/:slug/edit" element={<AdminCategoryForm />} />
         </Route>
       </Routes>
     </div>

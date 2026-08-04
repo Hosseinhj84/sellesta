@@ -2,7 +2,7 @@ from rest_framework import viewsets , status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Category, Products , ProductImage
-from .serializers import CategorySerializer, ProductsSerializer
+from .serializers import CategorySerializer, ProductsSerializer , ProductImageSerializer
 from sellesta_site.permissions import IsAdminOrReadOnly
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -33,7 +33,7 @@ class ProductImageUploadView(APIView):
         order = request.data.get("order" , 0)
         product_image = ProductImage.objects.create(product=product , image=image_file ,order=order)
         
-        return Response(ProductsSerializer(product_image).data , status=status.HTTP_201_CREATED)
+        return Response(ProductImageSerializer(product_image).data , status=status.HTTP_201_CREATED)
 
 class ProductImageDeleteView(APIView):
     permission_classes = [IsAdminOrReadOnly]

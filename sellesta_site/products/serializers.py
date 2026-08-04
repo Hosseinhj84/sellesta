@@ -3,13 +3,18 @@ from .models import Category, Products , ProductImage
 
 class CategorySerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
+    uploaded_image = serializers.ImageField(write_only=True , required=False , source="image")
+    product_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ["id", "name", "slug", "image", "created"]
-
+        fields = ["id", "name", "slug", "image", "uploaded_image" , "created" , "product_count"]
+        read_only_fields = ["slug"]
     def get_image(self, obj):
         return obj.get_image_url()
+    
+    def get_product_count(self , obj):
+        return obj.products.count()
 
 class ProductImageSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
@@ -37,6 +42,7 @@ class ProductsSerializer(serializers.ModelSerializer):
             "id", "name", "slug", "categories", "category_ids",
             "description", "price", "available", "image" , "created", "gallery" , "uploaded_image"
         ]
+        read_only_fields = ["slug"]
     
     def get_image(self , obj):
         return obj.get_image_url()

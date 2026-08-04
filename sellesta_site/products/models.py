@@ -17,6 +17,11 @@ class Category(models.Model):
         # عکس پیشفرض خارجی
         else :
             return "https://picsum.photos/200/200?blur"
+    
+    def save(self , *args , **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name , allow_unicode=True)
+        super().save(*args , **kwargs)
 
     class Meta:
         verbose_name = "دسته‌بندی"
@@ -36,7 +41,11 @@ class Products(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to="products/" , blank=True , null=True)
     image_url = models.URLField(blank=True , null=True)
-
+    
+    def save(self , *args , **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args , **kwargs)
     def get_image_url(self):
         if self.image:
             return self.image.url

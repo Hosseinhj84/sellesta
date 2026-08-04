@@ -26,6 +26,6 @@ urlpatterns = [
     path("cart/item/<int:item_id>/remove/" , RemoveCartItemView.as_view(), name="cart-item-remove"),
     path("orders/create/", CreateOrderView.as_view() , name="order_create"),
     path("orders/" , OrderListView.as_view() , name="order-list"),
-    path("products/<slug:slug>/images/" , ProductImageUploadView.as_view() , name="product-image-upload"),
+    path("products/<str:slug>/images/" , ProductImageUploadView.as_view() , name="product-image-upload"),
     path("products/image/<int:image_id>/" , ProductImageDeleteView.as_view() , name="product-image-delete")
 ] + router.urls
