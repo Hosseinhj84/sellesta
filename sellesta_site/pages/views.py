@@ -5,10 +5,6 @@ from rest_framework import permissions , viewsets
 from .serializers import HeaderLinksSerializers , PageSerializer
 # Create your views here.
 
-def page_detail(request, slug):
-    page = get_object_or_404(Pages , slug = slug)
-    return render(request , "pages/page_detail.html" , {"pages" : page})
-
 class HeaderLinkViewSet(viewsets.ModelViewSet):
     queryset = HeaderLinks.objects.all()
     serializer_class = HeaderLinksSerializers
