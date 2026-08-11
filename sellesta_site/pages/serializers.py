@@ -5,7 +5,7 @@ from .models import Pages
 class HeaderLinksSerializers(serializers.ModelSerializer):
     class Meta:
         model = HeaderLinks
-        fields = ["id" , "title" , "url" , "order"]
+        fields = ["id" , "title" , "url" , "order" , "is_active"]
 
 class PageSerializer(serializers.ModelSerializer):
     class Meta:

@@ -28,7 +28,10 @@ function Header() {
   useEffect(() => {
     api
       .get("header-links/")
-      .then((res) => setHeaderLinks(res.data.results))
+      .then((res) => {
+        const allLinks = res.data.results || res.data;
+        setHeaderLinks(allLinks.filter((link) => link.is_active));
+      })
       .catch((err) => console.log(err));
   }, []);
 

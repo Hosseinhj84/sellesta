@@ -618,7 +618,7 @@ function Home() {
                         </h3>
 
                         <p className="mt-2 text-xs text-gray-400">
-                          {cat.products_count || 0} محصول
+                          {cat.product_count || 0} محصول
                         </p>
 
                         <div

@@ -12,10 +12,29 @@ class CategoryViewSet(viewsets.ModelViewSet):
     lookup_field = "slug"
 
 class ProductsViewSet(viewsets.ModelViewSet):
-    queryset = Products.objects.all()
     serializer_class = ProductsSerializer
     permission_classes = [IsAdminOrReadOnly]
     lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = Products.objects.all()
+
+        category_slug = self.request.query_params.get("category")
+        if category_slug:
+            queryset = queryset.filter(categories__slug=category_slug)
+
+        search = self.request.query_params.get("search")
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+
+        ordering = self.request.query_params.get("ordering")
+        valid_orderings = ["price", "-price", "-created", "name"]
+        if ordering in valid_orderings:
+            queryset = queryset.order_by(ordering)
+        else:
+            queryset = queryset.order_by("-created")
+
+        return queryset.distinct()
 
 class ProductImageUploadView(APIView):
     permission_classes = [IsAdminOrReadOnly]
