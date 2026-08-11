@@ -1,111 +1,3 @@
-// import { useEffect, useState } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import api from "../../api/axios";
-
-// function AdminCategoryForm() {
-//   const { slug } = useParams();
-//   const isEditMode = Boolean(slug);
-//   const navigate = useNavigate();
-
-//   const [name, setName] = useState("");
-//   const [imageFile, setImageFile] = useState(null);
-//   const [currentImage, setCurrentImage] = useState(null);
-
-//   const [loading, setLoading] = useState(isEditMode);
-//   const [saving, setSaving] = useState("");
-//   const [error, setError] = useState("");
-
-//   useEffect(() => {
-//     api.get(`categories/${slug}/`).then((res) => {
-//       setName(res.data.name);
-//       setCurrentImage(res.data.image);
-//       setLoading(false);
-//     });
-//   }, [slug]);
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setSaving(true);
-//     setError("");
-
-//     const formData = new FormData();
-//     formData.append("name", name);
-//     if (imageFile) {
-//       formData.append("uploaded_image", imageFile);
-//     }
-
-//     try {
-//       if (isEditMode) {
-//         await api.patch(`categories/${slug}/`, formData, {
-//           headers: { "Content-Type": "multipart/form-data" },
-//         });
-//       } else {
-//         await api.post("categories/", formData, {
-//           headers: { "Content-Type": "multipart/form-data" },
-//         });
-//       }
-//       navigate("/admin/categories");
-//     } catch (err) {
-//       console.error(err);
-//       setError("خطا در ذخیره سازی");
-//     } finally {
-//       setSaving(false);
-//     }
-//   };
-
-//   if (loading) return <div>در حال بارگزاری...</div>;
-
-//   return (
-//     <div dir="rtl" className="max-w-md">
-//       <h1 className="mb-6 text-2xl font-bold text-gray-900">
-//         {isEditMode ? "ویرایش دسته‌بندی" : "دسته‌بندی جدید"}
-//       </h1>
-
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <input
-//           placeholder="نام دسته‌بندی"
-//           value={name}
-//           onChange={(e) => setName(e.target.value)}
-//           required
-//           className="w-full rounded-xl border border-gray-300 p-3 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-//         />
-
-//         <div>
-//           <p className="mb-2 text-sm font-medium text-gray-700">عکس</p>
-//           {currentImage && (
-//             <img
-//               src={
-//                 currentImage.startsWith("http")
-//                   ? currentImage
-//                   : `http://127.0.0.1:8000/${currentImage}`
-//               }
-//               alt="عکس فعلی"
-//               className="mb-2 h-20 w-20 rounded-xl object-cover"
-//             />
-//           )}
-//           <input
-//             type="file"
-//             accept="image/*"
-//             onChange={(e) => setImageFile(e.target.files[0])}
-//           />
-//         </div>
-
-//         {error && <p className="text-sm text-red-500">{error}</p>}
-
-//         <button
-//           type="submit"
-//           disabled={saving}
-//           className="w-full rounded-xl bg-blue-600 py-3 font-medium text-white transition hover:bg-blue-700 disabled:bg-gray-300"
-//         >
-//           {saving ? "در حال ذخیره..." : "ذخیره‌ی دسته‌بندی"}
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default AdminCategoryForm;
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -115,7 +7,7 @@ import {
   Save,
   AlertCircle,
 } from "lucide-react";
-import api from "../../api/axios";
+import api , {BASE_URL} from "../../api/axios";
 
 function AdminCategoryForm() {
   const { slug } = useParams();
@@ -202,7 +94,7 @@ function AdminCategoryForm() {
     : currentImage
       ? currentImage.startsWith("http")
         ? currentImage
-        : `http://127.0.0.1:8000/${currentImage}`
+        : `${BASE_URL}/${currentImage}`
       : null;
   return (
     <div dir="rtl" className="mx-auto max-w-6xl">

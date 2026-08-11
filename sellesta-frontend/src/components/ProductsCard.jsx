@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/axios";
 
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -35,7 +36,7 @@ function ProductsCard({ product }) {
 
   const imageSrc = product.image?.startsWith("http")
     ? product.image
-    : `http://127.0.0.1:8000${product.image}`;
+    : `${BASE_URL}${product.image}`;
 
   return (
     <Link to={`/products/${product.slug}`}>

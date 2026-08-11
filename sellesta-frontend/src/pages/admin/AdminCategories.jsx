@@ -1,93 +1,3 @@
-// import { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
-// import { Pencil, Trash2, Plus, ImageMinus } from "lucide-react";
-// import api from "../../api/axios";
-
-// function AdminCategories() {
-//   const [categories, setCategories] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetchCategories();
-//   }, []);
-
-//   const fetchCategories = () => {
-//     api
-//       .get("categories/")
-//       .then((res) => setCategories(res.data.results || res.data))
-//       .catch((err) => console.error(err))
-//       .finally(() => setLoading(false));
-//   };
-
-//   const handleDelete = async (slug) => {
-//     if (!window.confirm("مطمئنی میخوای این دسته بندی را حذف کنی ؟")) return;
-
-//     try {
-//       await api.delete(`categories/${slug}/`);
-//       setCategories((prev) => prev.filter((c) => c.slug !== slug));
-//     } catch (err) {
-//       console.error(err);
-//       alert("خطا در حذف دسته بندی محصول");
-//     }
-//   };
-
-//   if (loading) return <div>در حال بارگزاری ...</div>;
-
-//   return (
-//     <div dir="rtl">
-//       <div className="mb-6 flex items-center justify-between">
-//         <h1 className="text-2xl font-bold text-gray-900">دسته‌بندی‌ها</h1>
-//         <Link
-//           to="/admin/categories/new"
-//           className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
-//         >
-//           <Plus size={16} />
-//           دسته‌بندی جدید
-//         </Link>
-//       </div>
-
-//       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-//         {categories.map((cat) => {
-//           const imageSrc = cat.image?.startsWith("http")
-//             ? cat.image
-//             : `http://127.0.0.1:8000/${cat.image}`;
-
-//           return (
-//             <div
-//               key={cat.id}
-//               className="rounded-2xl border border-gray-200 bg-white p-4 text-center"
-//             >
-//               <img
-//                 src={imageSrc}
-//                 alt={cat.name}
-//                 className="mx-auto mb-3 h-20 w-20 rounded-xl object-cover"
-//               />
-//               <p className="mb-3 font-medium text-gray-900">{cat.name}</p>
-
-//               <div className="flex justify-center gap-2">
-//                 <Link
-//                   to={`/admin/categories/${cat.slug}/edit`}
-//                   className="rounded-lg p-2 text-blue-600 hover:bg-blue-50"
-//                 >
-//                   <Pencil size={16} />
-//                 </Link>
-//                 <button
-//                   onClick={() => handleDelete(cat.slug)}
-//                   className="rounded-lg p-2 text-red-600 hover:bg-red-50"
-//                 >
-//                   <Trash2 size={16} />
-//                 </button>
-//               </div>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default AdminCategories;
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -98,7 +8,7 @@ import {
   ImageOff,
   Package,
 } from "lucide-react";
-import api from "../../api/axios";
+import api , { BASE_URL} from "../../api/axios";
 
 function AdminCategories() {
   const [categories, setCategories] = useState([]);
@@ -248,7 +158,7 @@ function AdminCategories() {
         {categories.map((cat) => {
           const imageSrc = cat.image?.startsWith("http")
             ? cat.image
-            : `http://127.0.0.1:8000/${cat.image}`;
+            : `${BASE_URL}/${cat.image}`;
 
           return (
             <div

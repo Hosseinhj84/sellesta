@@ -15,7 +15,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-import api from "../api/axios";
+import api , { BASE_URL } from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
@@ -108,7 +108,7 @@ function ProductDetail() {
 
   const imageSrc = allImages[activeImageIndex]?.startsWith("http")
     ? allImages[activeImageIndex]
-    : `http://127.0.0.1:8000/${allImages[activeImageIndex]}`;
+    : `${BASE_URL}/${allImages[activeImageIndex]}`;
 
   const isSpecial = product.categories?.some((cat) => cat.slug === "special");
 
@@ -290,7 +290,7 @@ function ProductDetail() {
               {allImages.map((img, index) => {
                 const thumbSrc = img?.startsWith("http")
                   ? img
-                  : `http://127.0.0.1:8000/${img}`;
+                    : `${BASE_URL}/${img}`;
 
                 return (
                   <button

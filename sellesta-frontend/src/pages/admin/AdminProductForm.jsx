@@ -15,7 +15,7 @@ import {
   FileText,
 } from "lucide-react";
 
-import api from "../../api/axios";
+import api , {BASE_URL} from "../../api/axios";
 function AdminProductForms() {
   const { slug } = useParams();
 
@@ -54,7 +54,7 @@ function AdminProductForms() {
     if (currentImage) {
       return currentImage.startsWith("http")
         ? currentImage
-        : `http://127.0.0.1:8000${currentImage}`;
+        : `${BASE_URL}${currentImage}`;
     }
 
     return null;
@@ -681,7 +681,7 @@ border-slate-200
                       src={
                         img.image.startsWith("http")
                           ? img.image
-                          : `http://127.0.0.1:8000${img.image}`
+                          : `${BASE_URL}${img.image}`
                       }
                       className="
 aspect-square

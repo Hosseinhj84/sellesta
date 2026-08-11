@@ -2,6 +2,7 @@ import { ShoppingCart, ArrowRight, ShieldCheck, Truck } from "lucide-react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { BASE_URL } from "../api/axios";
 
 function Cart() {
   const { cart, updateCartItem, removeCartItem, loading } = useCart();
@@ -106,7 +107,7 @@ function Cart() {
           {cart.items.map((item) => {
             const imageSrc = item.product.image?.startsWith("http")
               ? item.product.image
-              : `http://127.0.0.1:8000${item.product.image}`;
+              : `${BASE_URL}${item.product.image}`;
 
             return (
               <article

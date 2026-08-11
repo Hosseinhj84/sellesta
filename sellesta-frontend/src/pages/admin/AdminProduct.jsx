@@ -11,7 +11,7 @@ import {
   CircleX,
   Eye,
 } from "lucide-react";
-import api from "../../api/axios";
+import api , {BASE_URL} from "../../api/axios";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -255,7 +255,7 @@ function AdminProducts() {
               {filteredProducts.map((product) => {
                 const imageSrc = product.image?.startsWith("http")
                   ? product.image
-                  : `http://127.0.0.1:8000${product.image}`;
+                  : `${BASE_URL}${product.image}`;
 
                 return (
                   <tr
@@ -424,7 +424,7 @@ function AdminProducts() {
           {filteredProducts.map((product) => {
             const imageSrc = product.image?.startsWith("http")
               ? product.image
-              : `http://127.0.0.1:8000${product.image}`;
+              : `${BASE_URL}${product.image}`;
 
             return (
               <div

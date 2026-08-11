@@ -8,7 +8,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-import api from "../api/axios";
+import api , { BASE_URL} from "../api/axios";
 import ProductsCard from "../components/ProductsCard";
 import ScrollHero from "../components/ScrollHero";
 
@@ -58,7 +58,7 @@ const getImageUrl = (image) => {
     return image;
   }
 
-  return `http://127.0.0.1:8000/${image}`;
+  return `${BASE_URL}/${image}`;
 };
 
 /* =========================================================
