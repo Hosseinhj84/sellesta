@@ -6,3 +6,4 @@ media/
 *.sqlite3
 .env
 node_modules/
+.env
